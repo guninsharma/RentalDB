@@ -2,13 +2,21 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'rentaldb_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'rentaldb_secret_key')
 
 # ── DB connection ──────────────────────────────────────────────────────────────
 def get_db():
     return mysql.connector.connect(
-        host="localhost", user="root", password="Custom#JamBun#69", database="RentalDB"
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD', 'Custom#JamBun#69'),
+        database=os.getenv('DB_NAME', 'RentalDB')
     )
 
 # ── Home ───────────────────────────────────────────────────────────────────────
