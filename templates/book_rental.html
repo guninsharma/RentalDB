@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Book Rental — RentalDB{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">Book <span>Rental</span></div>
+    <div class="page-subtitle">Create a new rental transaction</div>
+  </div>
+  <a href="{{ url_for('rentals') }}" class="btn btn-secondary">← Back</a>
+</div>
+
+{% if new_id %}
+<div class="card" style="margin-bottom:1.5rem; border-left:4px solid var(--success); background:rgba(108,161,85,0.06);">
+  <p style="font-size:1.05rem; font-weight:700; color:#4A7339;">
+    ✅ Rental booked!
+    &nbsp;|&nbsp; New Rental ID: <span style="font-family:var(--font-display); font-size:1.3rem;">#{{ new_id }}</span>
+  </p>
+</div>
+{% endif %}
+
+<div class="card form-wrap" style="max-width:680px;">
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Customer</label>
+        <select name="customer_id" required>
+          <option value="">Select customer</option>
+          {% for c in customers %}
+          <option value="{{ c.Customer_ID }}">#{{ c.Customer_ID }} — {{ c.Name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Equipment (Available only)</label>
+        <select name="equip_id" required>
+          <option value="">Select equipment</option>
+          {% for e in equipment %}
+          <option value="{{ e.Equip_ID }}">#{{ e.Equip_ID }} — {{ e.Equip_Name }} (₹{{ e.Rent_Price_Per_Day }}/day)</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Branch (Pickup)</label>
+        <select name="branch_id" required>
+          <option value="">Select branch</option>
+          {% for b in branches %}
+          <option value="{{ b.Branch_ID }}">{{ b.Branch_Name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Staff</label>
+        <select name="staff_id" required>
+          <option value="">Select staff</option>
+          {% for s in staff %}
+          <option value="{{ s.Staff_ID }}">{{ s.Staff_Name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" name="start_date" required>
+      </div>
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" name="end_date" required>
+      </div>
+      <div class="form-group">
+        <label>Total Amount (₹)</label>
+        <input type="number" step="0.01" name="total_amount" placeholder="e.g. 3000.00" required>
+      </div>
+      <div class="form-group">
+        <label>Rental Status</label>
+        <select name="rental_status" required>
+          <option value="">Select status</option>
+          <option value="Active">Active</option>
+          <option value="Reserved">Reserved</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem; display:flex; gap:0.75rem;">
+      <button type="submit" class="btn btn-primary">Book Rental</button>
+      <a href="{{ url_for('rentals') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

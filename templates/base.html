@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}RentalDB{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('index') }}" class="nav-brand">
+      <span class="brand-icon">⬡</span>
+      <span>Rental<strong>DB</strong></span>
+    </a>
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}"     class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Dashboard</a>
+      <a href="{{ url_for('customers') }}" class="nav-link {% if 'customer' in request.endpoint %}active{% endif %}">Customers</a>
+      <a href="{{ url_for('equipment') }}" class="nav-link {% if 'equipment' in request.endpoint %}active{% endif %}">Equipment</a>
+      <a href="{{ url_for('rentals') }}"   class="nav-link {% if 'rental' in request.endpoint %}active{% endif %}">Rentals</a>
+      <a href="{{ url_for('payments') }}"  class="nav-link {% if 'payment' in request.endpoint %}active{% endif %}">Payments</a>
+      <a href="{{ url_for('analytics') }}" class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}">Analytics</a>
+      {% if session.customer_name %}
+        <span class="nav-link" style="color:var(--text-muted)">👤 {{ session.customer_name }}</span>
+        <a href="{{ url_for('logout') }}" class="nav-link btn-login">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="nav-link btn-login">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-area">
+          {% for cat, msg in messages %}
+            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <p>RentalDB &mdash; Equipment Rental Management &bull; DBMS Lab Project</p>
+  </footer>
+  <script src="{{ url_for('static', filename='js/js') }}"></script>
+</body>
+</html>

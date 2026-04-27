@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Payments — RentalDB{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Payment <span>Records</span></div>
+    <div class="page-subtitle">All payment transactions</div>
+  </div>
+  <a href="{{ url_for('make_payment') }}" class="btn btn-primary">+ Record Payment</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Rental #</th>
+        <th>Customer</th>
+        <th>Equipment</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Mode</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in payments %}
+      <tr>
+        <td><strong>#{{ p.Payment_ID }}</strong></td>
+        <td>#{{ p.Rental_ID }}</td>
+        <td>{{ p.Customer_Name or '—' }}</td>
+        <td>{{ p.Equip_Name or '—' }}</td>
+        <td>{{ p.Payment_Date }}</td>
+        <td>₹{{ p.Amount }}</td>
+        <td>{{ p.Payment_Mode }}</td>
+        <td>
+          <span class="badge badge-{{ p.Payment_Status | lower }}">{{ p.Payment_Status }}</span>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:2rem;">No payments found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Analytics — RentalDB{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Data <span>Analytics</span></div>
+    <div class="page-subtitle">Aggregated insights using GROUP BY and HAVING</div>
+  </div>
+</div>
+
+<!-- ── Section 1: Revenue by Branch ───────────────────────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Branch <span>Revenue</span></div>
+  <div class="page-subtitle">Total completed payments grouped by branch</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2.5rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Branch</th>
+        <th>Completed Payments</th>
+        <th>Total Revenue (₹)</th>
+        <th>Avg Payment (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in branch_revenue %}
+      <tr>
+        <td><strong>{{ row.Branch_Name }}</strong></td>
+        <td>{{ row.Total_Payments }}</td>
+        <td>₹{{ "%.2f"|format(row.Total_Revenue) }}</td>
+        <td>₹{{ "%.2f"|format(row.Avg_Payment) }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Section 2: Branches with Revenue > 0 (HAVING) ─────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Active <span>Branches</span> <span style="font-size:1rem;color:var(--text-muted);font-family:var(--font-body);font-weight:500;">(HAVING revenue &gt; 0)</span></div>
+  <div class="page-subtitle">Only branches that have earned revenue</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2.5rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Branch</th>
+        <th>Total Revenue (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in active_branches %}
+      <tr>
+        <td><strong>{{ row.Branch_Name }}</strong></td>
+        <td>₹{{ "%.2f"|format(row.Total_Revenue) }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Section 3: Equipment Category Stats ────────────────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Category <span>Statistics</span></div>
+  <div class="page-subtitle">Equipment grouped by category</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2.5rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Total Items</th>
+        <th>Available</th>
+        <th>Avg Price/Day (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in category_stats %}
+      <tr>
+        <td><strong>{{ row.Category or 'Uncategorised' }}</strong></td>
+        <td>{{ row.Total_Items }}</td>
+        <td>{{ row.Available }}</td>
+        <td>₹{{ "%.2f"|format(row.Avg_Price) }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Section 4: Multi-item Categories (HAVING) ─────────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Popular <span>Categories</span> <span style="font-size:1rem;color:var(--text-muted);font-family:var(--font-body);font-weight:500;">(HAVING count &gt; 1)</span></div>
+  <div class="page-subtitle">Categories with more than one item in inventory</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2.5rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Item Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in multi_item_categories %}
+      <tr>
+        <td><strong>{{ row.Category }}</strong></td>
+        <td>{{ row.Total_Items }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Section 5: Customer Rental Stats ──────────────────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Customer <span>Activity</span></div>
+  <div class="page-subtitle">Total rentals and spending per customer</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2.5rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Total Rentals</th>
+        <th>Total Spent (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in customer_stats %}
+      <tr>
+        <td><strong>{{ row.Customer_Name }}</strong></td>
+        <td>{{ row.Total_Rentals }}</td>
+        <td>₹{{ "%.2f"|format(row.Total_Spent or 0) }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Section 6: Repeat Customers (HAVING) ──────────────── -->
+<div style="margin-bottom:0.6rem;">
+  <div class="page-title" style="font-size:1.3rem;">Repeat <span>Customers</span> <span style="font-size:1rem;color:var(--text-muted);font-family:var(--font-body);font-weight:500;">(HAVING rentals &gt; 1)</span></div>
+  <div class="page-subtitle">Customers who have rented more than once</div>
+</div>
+<div class="table-wrap" style="margin-bottom:2rem;">
+  <table>
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Total Rentals</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in repeat_customers %}
+      <tr>
+        <td><strong>{{ row.Customer_Name }}</strong></td>
+        <td>{{ row.Total_Rentals }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2" style="text-align:center;color:var(--text-muted);padding:1.5rem;">No repeat customers yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

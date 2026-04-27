@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Edit Customer — RentalDB{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">Edit <span>Customer</span></div>
+    <div class="page-subtitle">Update details for #{{ customer.Customer_ID }}</div>
+  </div>
+  <a href="{{ url_for('customers') }}" class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="card form-wrap">
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" name="first_name" value="{{ customer.First_Name }}" required>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" name="last_name" value="{{ customer.Last_Name }}" required>
+      </div>
+      <div class="form-group full">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ customer.Email }}" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" name="phone" value="{{ customer.PhNo or '' }}">
+      </div>
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="date" name="dob" value="{{ customer.DOB or '' }}">
+      </div>
+      <div class="form-group full">
+        <label>Address</label>
+        <input type="text" name="address" value="{{ customer.Address or '' }}">
+      </div>
+    </div>
+    <div style="margin-top:1.5rem; display:flex; gap:0.75rem;">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{{ url_for('customers') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

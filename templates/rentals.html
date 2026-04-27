@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Rentals — RentalDB{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Rental <span>Records</span></div>
+    <div class="page-subtitle">All rental transactions</div>
+  </div>
+  <a href="{{ url_for('book_rental') }}" class="btn btn-primary">+ Book Rental</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Equipment</th>
+        <th>Branch</th>
+        <th>Staff</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Return</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rentals %}
+      <tr>
+        <td><strong>#{{ r.Rental_ID }}</strong></td>
+        <td>{{ r.Customer_Name or '—' }}</td>
+        <td>{{ r.Equip_Name or '—' }}</td>
+        <td>{{ r.Branch_Name or '—' }}</td>
+        <td>{{ r.Staff_Name or '—' }}</td>
+        <td>{{ r.Start_Date }}</td>
+        <td>{{ r.End_Date }}</td>
+        <td>{{ r.Return_Date or '—' }}</td>
+        <td>₹{{ r.Total_Amount }}</td>
+        <td>
+          <span class="badge badge-{{ r.Rental_Status | lower }}">{{ r.Rental_Status }}</span>
+        </td>
+        <td>
+          <!-- RUBRIC 6: Edit rental -->
+          <a href="{{ url_for('edit_rental', rid=r.Rental_ID) }}" class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.82rem;">Edit</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="11" style="text-align:center; color:var(--text-muted); padding:2rem;">No rentals found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

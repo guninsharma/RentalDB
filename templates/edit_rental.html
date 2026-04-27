@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Edit Rental — RentalDB{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="page-title">Edit <span>Rental</span></div>
+    <div class="page-subtitle">Update status for Rental #{{ rental.Rental_ID }}</div>
+  </div>
+  <a href="{{ url_for('rentals') }}" class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="card form-wrap">
+  <!-- Read-only info -->
+  <div style="background:var(--surface2); border-radius:var(--radius-sm); padding:1rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+    <div><span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Customer</span><br><strong>{{ rental.Customer_Name }}</strong></div>
+    <div><span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Equipment</span><br><strong>{{ rental.Equip_Name }}</strong></div>
+    <div><span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Start Date</span><br>{{ rental.Start_Date }}</div>
+    <div><span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">End Date</span><br>{{ rental.End_Date }}</div>
+    <div><span style="font-size:0.78rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Total Amount</span><br>₹{{ rental.Total_Amount }}</div>
+  </div>
+
+  <form method="POST">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Rental Status</label>
+        <select name="rental_status" required>
+          <option value="Reserved"  {% if rental.Rental_Status == 'Reserved'  %}selected{% endif %}>Reserved</option>
+          <option value="Active"    {% if rental.Rental_Status == 'Active'    %}selected{% endif %}>Active</option>
+          <option value="Completed" {% if rental.Rental_Status == 'Completed' %}selected{% endif %}>Completed</option>
+          <option value="Cancelled" {% if rental.Rental_Status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Return Date</label>
+        <input type="date" name="return_date" value="{{ rental.Return_Date or '' }}">
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.75rem;">
+      💡 Setting status to <strong>Completed</strong> will automatically mark the equipment as Available again.
+    </p>
+    <div style="margin-top:1.2rem; display:flex; gap:0.75rem;">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{{ url_for('rentals') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Customers — RentalDB{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Customers <span>List</span></div>
+    <div class="page-subtitle">All registered customers</div>
+  </div>
+  <a href="{{ url_for('register_customer') }}" class="btn btn-primary">+ Register Customer</a>
+</div>
+
+<!-- RUBRIC 3 & 5: Filter + Search + Sort form -->
+<div class="panel">
+  <form method="GET" action="{{ url_for('customers') }}" class="filter-bar">
+    <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:flex-end;">
+      <div class="form-group" style="flex:1; min-width:160px;">
+        <label>Search by Name</label>
+        <input type="text" name="search_name" value="{{ search_name }}" placeholder="First or Last name...">
+      </div>
+      <div class="form-group" style="flex:1; min-width:160px;">
+        <label>Search by Email</label>
+        <input type="text" name="search_email" value="{{ search_email }}" placeholder="Email address...">
+      </div>
+      <div class="form-group" style="width:100px;">
+        <label>Sort Name</label>
+        <select name="sort">
+          <option value="ASC" {% if sort_order == 'ASC' %}selected{% endif %}>A-Z</option>
+          <option value="DESC" {% if sort_order == 'DESC' %}selected{% endif %}>Z-A</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:0.5rem; padding-bottom:0.05rem;">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <a href="{{ url_for('customers') }}" class="btn btn-secondary">Clear</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>DOB</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in customers %}
+      <tr>
+        <td>#{{ c.Customer_ID }}</td>
+        <td><strong>{{ c.First_Name }} {{ c.Last_Name }}</strong></td>
+        <td>{{ c.Email }}</td>
+        <td>{{ c.PhNo }}</td>
+        <td>{{ c.DOB }}</td>
+        <td>
+          <div style="display:flex; gap:0.4rem;">
+            <!-- RUBRIC 6: Edit -->
+            <a href="{{ url_for('edit_customer', cid=c.Customer_ID) }}" class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.82rem;">Edit</a>
+            <!-- RUBRIC 4: Delete -->
+            <form method="POST" action="{{ url_for('delete_customer', cid=c.Customer_ID) }}"
+                  onsubmit="return confirm('Delete customer #{{ c.Customer_ID }}?')">
+              <button type="submit" class="btn btn-danger" style="padding:0.3rem 0.8rem; font-size:0.82rem;">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" style="text-align:center; color:var(--text-muted); padding:2rem;">No customers found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

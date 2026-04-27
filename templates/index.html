@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — RentalDB{% endblock %}
+{% block content %}
+
+<div class="hero">
+  <div class="hero-title">Equipment Rental<br><span>Management System</span></div>
+  <p class="hero-sub">Track rentals, customers, equipment & payments in one place.</p>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Customers</div>
+    <div class="stat-value">{{ customers }}</div>
+    <div class="stat-desc">Registered accounts</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Available Equipment</div>
+    <div class="stat-value">{{ available }}</div>
+    <div class="stat-desc">Ready to rent</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Active Rentals</div>
+    <div class="stat-value">{{ active }}</div>
+    <div class="stat-desc">Currently out</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Revenue</div>
+    <div class="stat-value">₹{{ "%.0f"|format(revenue) }}</div>
+    <div class="stat-desc">Completed payments</div>
+  </div>
+</div>
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Quick <span>Actions</span></div>
+    <div class="page-subtitle">Jump straight into a task</div>
+  </div>
+</div>
+
+<div class="actions-grid">
+  <a href="{{ url_for('register_customer') }}" class="action-card">
+    <div class="action-icon">👤</div>
+    <div>
+      <div class="action-label">Register Customer</div>
+      <div class="action-sub">Add a new customer</div>
+    </div>
+  </a>
+  <a href="{{ url_for('add_equipment') }}" class="action-card">
+    <div class="action-icon">🔧</div>
+    <div>
+      <div class="action-label">Add Equipment</div>
+      <div class="action-sub">Register new item</div>
+    </div>
+  </a>
+  <a href="{{ url_for('book_rental') }}" class="action-card">
+    <div class="action-icon">📋</div>
+    <div>
+      <div class="action-label">Book Rental</div>
+      <div class="action-sub">Create a new rental</div>
+    </div>
+  </a>
+</div>
+{% endblock %}
