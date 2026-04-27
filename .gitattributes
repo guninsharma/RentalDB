@@ -1,0 +1,3 @@
+templates/*.html linguist-detectable=false
+static/css/*.css linguist-detectable=false
+static/js/*.js linguist-detectable=false
